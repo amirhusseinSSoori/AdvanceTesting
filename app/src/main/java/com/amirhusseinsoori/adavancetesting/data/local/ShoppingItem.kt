@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "shopping_items")
 data class ShoppingItem(
     var name: String,
-    var amount: String,
+    var amount: Int,
     var price: Float,
     var imageUrl: String,
     @PrimaryKey(autoGenerate = true)

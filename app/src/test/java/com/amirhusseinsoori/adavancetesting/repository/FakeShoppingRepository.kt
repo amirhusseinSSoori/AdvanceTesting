@@ -7,22 +7,27 @@ import com.amirhusseinsoori.adavancetesting.data.remote.response.ImageResponse
 import com.amirhusseinsoori.adavancetesting.util.Resource
 
 class FakeShoppingRepository : ShoppingRepository {
+
     private val shoppingItems = mutableListOf<ShoppingItem>()
-    private val observableShoppingItem = MutableLiveData<List<ShoppingItem>>(shoppingItems)
+
+    private val observableShoppingItems = MutableLiveData<List<ShoppingItem>>(shoppingItems)
     private val observableTotalPrice = MutableLiveData<Float>()
+
     private var shouldReturnNetworkError = false
+
     fun setShouldReturnNetworkError(value: Boolean) {
         shouldReturnNetworkError = value
     }
 
-    private fun refreshLiveData(){
-         observableShoppingItem.postValue(shoppingItems)
+    private fun refreshLiveData() {
+        observableShoppingItems.postValue(shoppingItems)
         observableTotalPrice.postValue(getTotalPrice())
     }
-    private fun getTotalPrice():Float{
-        return shoppingItems.sumByDouble { it.price.toDouble() }.toFloat()
 
+    private fun getTotalPrice(): Float {
+        return shoppingItems.sumByDouble { it.price.toDouble() }.toFloat()
     }
+
     override suspend fun insertShoppingItem(shoppingItem: ShoppingItem) {
         shoppingItems.add(shoppingItem)
         refreshLiveData()
@@ -34,18 +39,30 @@ class FakeShoppingRepository : ShoppingRepository {
     }
 
     override fun observeAllShoppingItem(): LiveData<List<ShoppingItem>> {
-        return observeAllShoppingItem()
+        return observableShoppingItems
     }
 
+
     override fun observeTotalPrice(): LiveData<Float> {
-       return observeTotalPrice()
+        return observableTotalPrice
     }
 
     override suspend fun searchForImage(imageQuery: String): Resource<ImageResponse> {
-        return if(shouldReturnNetworkError){
-          Resource.error("Error",null)
-        }else{
-            Resource.success(ImageResponse(listOf(),0,0))
+        return if(shouldReturnNetworkError) {
+            Resource.error("Error", null)
+        } else {
+            Resource.success(ImageResponse(listOf(), 0, 0))
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+

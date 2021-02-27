@@ -6,6 +6,8 @@ import androidx.room.Room
 import com.amirhusseinsoori.adavancetesting.data.local.ShoppingDao
 import com.amirhusseinsoori.adavancetesting.data.local.ShoppingDataBase
 import com.amirhusseinsoori.adavancetesting.data.remote.PixabayApi
+import com.amirhusseinsoori.adavancetesting.repository.DefaultShoppingRepository
+import com.amirhusseinsoori.adavancetesting.repository.ShoppingRepository
 import com.amirhusseinsoori.adavancetesting.util.Constance
 import dagger.Module
 import dagger.Provides
@@ -40,5 +42,12 @@ object AppModule {
         return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(Constance.URL_API).
                 build().create(PixabayApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideDefaultShoppingRepository(
+        dao: ShoppingDao,
+        api: PixabayApi
+    ) = DefaultShoppingRepository(dao, api) as ShoppingRepository
 
 }

@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.amirhusseinsoori.adavancetesting.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -15,26 +17,40 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
+//@RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
+@HiltAndroidTest
 class ShoppingDaoTest {
+
+
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     // You can use this rule for your host side tests that use Architecture Components.
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-    private lateinit var dataBase: ShoppingDataBase
+
+
+//    private lateinit var dataBase: ShoppingDataBase
+    @Inject
+    @Named("test_db")
+    lateinit var dataBase: ShoppingDataBase
     private lateinit var dao: ShoppingDao
 
 
     @Before
     fun setup() {
-        //because its not real dataBase
+        hiltRule.inject()
+ /*       //because its not real dataBase
         dataBase = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             ShoppingDataBase::class.java
-        ).allowMainThreadQueries().build()
+        ).allowMainThreadQueries().build()*/
         dao = dataBase.shoppingDao()
     }
 

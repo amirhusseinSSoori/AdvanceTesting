@@ -6,7 +6,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.amirhusseinsoori.adavancetesting.getOrAwaitValue
+import com.amirhusseinsoori.adavancetesting.ui.ShoppingFragment
 import com.google.common.truth.Truth.assertThat
+import com.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -61,6 +63,12 @@ class ShoppingDaoTest {
 
     // This method requires that all coroutines launched inside [testBody] complete, or are cancelled, as part of the test  conditions.
 
+    @Test
+    fun testLaunchFragmentInHiltContainer() {
+        launchFragmentInHiltContainer<ShoppingFragment> {
+
+        }
+    }
     @Test
     fun insertShoppingItem() = runBlockingTest {
         val shoppingItem = ShoppingItem("ali", 1, 1f, "url", id = 1)
